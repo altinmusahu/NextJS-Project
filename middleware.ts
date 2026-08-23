@@ -22,6 +22,19 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
+  // Already logged in — bounce away from /login instead of showing the form again.
+  if (pathname === "/login") {
+    if (token && (await verifyToken(token))) {
+      return NextResponse.redirect(new URL("/", req.url))
+    }
+    // Also opt this page out of the browser's back-forward cache, so pressing
+    // Back after logging in can't silently restore the stale login page
+    // without ever hitting this middleware check again.
+    const res = NextResponse.next()
+    res.headers.set("Cache-Control", "no-store")
+    return res
+  }
+
   // Protect API routes
   if (pathname.startsWith("/api/")) {
     if (PUBLIC_API_PATHS.some((p) => pathname.startsWith(p))) return NextResponse.next()
@@ -35,5 +48,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/api/:path*"],
+  matcher: ["/dashboard/:path*", "/api/:path*", "/login"],
 }

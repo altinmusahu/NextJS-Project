@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { FirstLoginModal } from "@/app/components/dashboard/FirstLoginModal"
 import { Spinner } from "@/components/ui/Spinner"
@@ -11,6 +11,18 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [firstLoginUserId, setFirstLoginUserId] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Some browsers (notably Safari) can restore this page from the
+    // back-forward cache without re-running middleware, which would let an
+    // already-authenticated user land back on the login form. Force a fresh
+    // load in that case so the server-side redirect gets a chance to run.
+    function handlePageShow(e: PageTransitionEvent) {
+      if (e.persisted) window.location.reload()
+    }
+    window.addEventListener("pageshow", handlePageShow)
+    return () => window.removeEventListener("pageshow", handlePageShow)
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
