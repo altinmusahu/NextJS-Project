@@ -1,13 +1,11 @@
 "use client"
 
 import { useState, Suspense } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { FirstLoginModal } from "@/app/components/dashboard/FirstLoginModal"
 import { Spinner } from "@/components/ui/Spinner"
 
 function LoginForm() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -19,28 +17,36 @@ function LoginForm() {
     setLoading(true)
     setError(null)
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
 
-    if (!res.ok) {
       const data = await res.json()
-      setError(data.message ?? "Login failed")
+
+      if (!res.ok) {
+        setError(data.error ?? "Login failed")
+        setLoading(false)
+        return
+      }
+
+      if (!data.user.is_first_login_executed) {
+        setLoading(false)
+        setFirstLoginUserId(data.user.id)
+        return
+      }
+
+      // Hard navigation: the auth cookie was just set by the response above, and a
+      // soft router.push() can serve a stale cached /dashboard entry (e.g. the
+      // redirect-to-login result from before the user was authenticated) instead
+      // of issuing a fresh, cookie-aware request.
+      window.location.href = "/dashboard"
+    } catch {
+      setError("Network error. Please try again.")
       setLoading(false)
-      return
     }
-
-    const data = await res.json()
-
-    if (!data.user.is_first_login_executed) {
-      setLoading(false)
-      setFirstLoginUserId(data.user.id)
-      return
-    }
-
-    router.push("/dashboard")
   }
 
   return (

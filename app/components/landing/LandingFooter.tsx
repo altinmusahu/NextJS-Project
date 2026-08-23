@@ -104,6 +104,7 @@ export default function LandingFooter({ t }: FooterProps) {
             <li><Link href="/contact" className="hover:text-[#F3EADA] transition-colors">Contact Us</Link></li>
             <li><Link href="/faq" className="hover:text-[#F3EADA] transition-colors">FAQ</Link></li>
             <li><Link href="/privacy-policy" className="hover:text-[#F3EADA] transition-colors">Privacy Policy</Link></li>
+            <li><Link href="/refund-policy" className="hover:text-[#F3EADA] transition-colors">Refund Policy</Link></li>
             <li><Link href="/impressum" className="hover:text-[#F3EADA] transition-colors">Impressum</Link></li>
             <li><Link href="/dashboard" className="hover:text-[#F3EADA] transition-colors">Dashboard Login</Link></li>
           </ul>

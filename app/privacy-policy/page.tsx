@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: false },
 }
 
-const LAST_UPDATED = "1 June 2025"
+const LAST_UPDATED = "23 August 2026"
 
 export default function PrivacyPolicyPage() {
   return (
@@ -148,6 +148,7 @@ export default function PrivacyPolicyPage() {
             <ul className="mt-3 space-y-2 list-disc list-inside">
               <li><strong className="text-[#2A2018]">Supabase Inc.</strong> — database and authentication (EU region).</li>
               <li><strong className="text-[#2A2018]">Vercel Inc.</strong> — hosting and anonymised analytics.</li>
+              <li><strong className="text-[#2A2018]">2Checkout (Verifone)</strong> — payment processing. We do not store your full card details; payment data is collected and processed directly by 2Checkout under its own privacy policy.</li>
             </ul>
           </div>
 
