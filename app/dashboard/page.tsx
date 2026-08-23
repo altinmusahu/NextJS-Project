@@ -61,6 +61,45 @@ function Pill({ children, color, dot }: { children: React.ReactNode; color: stri
 
 export default function DashboardPage() {
   return (
+    <div style={{ position: "relative" }}>
+      <div
+        aria-hidden="true"
+        style={{ filter: "blur(6px)", pointerEvents: "none", userSelect: "none" }}
+      >
+        <DashboardOverviewContent />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div
+          style={{
+            background: "#fff",
+            border: "1px solid var(--kh-border, #E8E4DF)",
+            borderRadius: 16,
+            padding: "20px 36px",
+            boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+            fontSize: 20,
+            fontWeight: 700,
+            color: "#5A3E2B",
+          }}
+        >
+          Coming soon
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DashboardOverviewContent() {
+  return (
     <div className="kh-page">
       {/* Topbar */}
       <header className="kh-topbar">
